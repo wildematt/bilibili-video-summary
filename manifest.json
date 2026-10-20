@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "B站视频总结",
+  "version": "1.6.0",
+  "description": "提取 B 站字幕，在侧栏使用智谱或硅基流动总结视频、连续追问，支持分 P 与导出。",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "https://api.bilibili.com/*",
+    "https://*.hdslb.com/*",
+    "https://*.bilibili.com/*",
+    "https://open.bigmodel.cn/*",
+    "https://api.siliconflow.cn/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "B站视频总结",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "minimum_chrome_version": "116",
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}

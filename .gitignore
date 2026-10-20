@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.log
+*.zip
+*.crx
+work/
+coverage/
+local-settings.json

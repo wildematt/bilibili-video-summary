@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>B站视频总结</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <main>
+    <section class="video-card" aria-labelledby="video-title"><div class="eyebrow">当前视频</div><h2 id="video-title">打开一个 B 站视频，开始拾取字幕。</h2><div class="video-bottom"><span id="video-detail">支持普通视频与多分 P</span><button id="refresh" class="refresh" type="button">重新提取 ↻</button></div></section>
+    <div id="status" class="status" role="status" aria-live="polite">正在识别当前视频…</div>
+    <button id="summarize" class="ai-button" disabled>✦ AI 总结 <span>一句话 · 核心观点</span></button>
+    <div class="actions"><button id="srt" disabled>下载 SRT</button><button id="txt" disabled>下载 TXT</button><button id="copy" disabled>复制文本</button></div>
+    <p class="hint">请先登录 B站，仅支持提取已有字幕。</p>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body></html>
