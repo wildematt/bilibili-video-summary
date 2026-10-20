@@ -4,7 +4,7 @@
 
 原生 JavaScript · Manifest V3 · 无需构建 · API 直连
 
-![B站视频总结演示：左侧为字幕提取弹窗，右侧为 AI 总结与连续追问侧栏](docs/images/demo.png)
+![B站视频总结演示：左侧为字幕提取弹窗，右侧为 AI 总结与连续追问侧栏](docs/images/demo-hd-v2.png)
 
 *深色模式演示，字幕与回答为模拟内容。*
 
