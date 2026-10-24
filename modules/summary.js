@@ -90,24 +90,24 @@ export async function readSse(body, onText = ()=>{}) {
   return text;
 }
 
-export async function completion({key,messages:input,signal,onText,partial=false,fetcher=fetch,provider='zhipu',model}) {
+export async function completion({key,messages:input,signal,onText,partial=false,fetcher=fetch,provider='zhipu',model,timeoutMs=180000,maxTokens}) {
   const config=providerConfig(provider);
   validateKey(key);
   const controller=new AbortController();
   const abort=()=>controller.abort();
   if(signal?.aborted) controller.abort(); else signal?.addEventListener('abort',abort,{once:true});
-  const timer=setTimeout(()=>controller.abort(),180000);
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
   try {
     const response=await fetcher(config.endpoint,{
       method:'POST',credentials:'omit',redirect:'error',signal:controller.signal,
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},
-      body:JSON.stringify({model:model || config.model,messages:input,stream:true,...(provider==='zhipu'?{thinking:{type:'disabled'}}:{enable_thinking:false}),max_tokens:partial?1600:3500,temperature:0.3})
+      body:JSON.stringify({model:model || config.model,messages:input,stream:true,...(provider==='zhipu'?{thinking:{type:'disabled'}}:{enable_thinking:false}),max_tokens:maxTokens ?? (partial?1600:3500),temperature:0.3})
     });
     if(!response.ok) throw new Error(apiError(response.status));
     return await readSse(response.body,onText);
   } catch(error) {
     if(signal?.aborted) throw new DOMException('已取消生成。','AbortError');
-    if(controller.signal.aborted) throw new Error('本次请求超过 3 分钟，已停止。请稍后重试。');
+    if(controller.signal.aborted) throw new Error(`本次请求超过 ${timeoutMs/1000} 秒，已停止。请检查网络后重试。`);
     if(error instanceof TypeError) throw new Error(`无法连接${config.name}，请检查网络和插件的网站访问权限。`);
     if(error instanceof Error) throw new Error(error.message.replaceAll('智谱',config.name));
     throw error;
@@ -126,4 +126,9 @@ export async function summarize({key,title,cues,signal,onProgress=()=>{},onText=
   if(signal?.aborted) throw new DOMException('已取消生成。','AbortError');
   onProgress('分段提炼完成，正在合并最终总结…');
   return complete({key,messages:messages(title,notes.map((s,i)=>`第 ${i+1} 段笔记：\n${s}`).join('\n\n')),signal,onText});
+}
+
+// Exercise the same streaming endpoint and model used for summaries.
+export async function testConnection(options) {
+  return completion({...options,messages:[{role:'user',content:'请只回复 OK'}],timeoutMs:30000,maxTokens:32});
 }
